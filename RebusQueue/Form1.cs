@@ -59,7 +59,7 @@ namespace RebusQueue
                         QueueMessage data = new QueueMessage
                         {
                             Id = Convert.ToInt32(row["id"]),
-                            Priority = Convert.ToInt32(row["priority"]),
+                            Priority = row["priority"] != DBNull.Value ?  Convert.ToInt32(row["priority"]) : 0,
                             // Convert DateTimeOffset to DateTime
                             Expiration = ((DateTimeOffset)row["expiration"]).DateTime,
                             Visible = ((DateTimeOffset)row["visible"]).DateTime,
