@@ -10,11 +10,11 @@ namespace RebusQueue
 {
     public partial class Form1 : Form
     {
-        private string connectionString;
-        private string RebusQueueName = "defaultRebusQueue";  // Example default values
-        private string DeadletterQueueName = "defaultDeadletterQueue";
-        private string SagaDataTableName = "defaultSagaDataTable";
-        private string SagaIndexTableName = "defaultSagaIndexTable";
+        private string connectionString = "Data Source = 10.62.1.77,1401; Database=tum1;Integrated Security = false; User ID = sa; Password=Password123";
+        private string RebusQueueName = "RebusTenantSync";  // Example default values
+        private string DeadletterQueueName = "RebusDeadletter";
+        private string SagaDataTableName = "RebusSagaData";
+        private string SagaIndexTableName = "RebusSagaIndexes";
         List<QueueMessage> decodedData = new List<QueueMessage>();
         List<SagaData> sagaData = new List<SagaData>();
 
@@ -22,8 +22,8 @@ namespace RebusQueue
         {
             InitializeComponent();
             InitializeMenu();
+            InitializeTreeView();
             UpdateStatusBar();
-            LoadDataToDataGridView();
         }
 
         private void InitializeMenu()
@@ -173,7 +173,83 @@ namespace RebusQueue
             return decodedData;
         }
 
+        private List<QueueMessage> GetDeadLetterData()
+        {
+            List<QueueMessage> decodedData = new List<QueueMessage>();
 
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = $"SELECT * FROM {DeadletterQueueName} WITH (NOLOCK)";
+                    SqlDataAdapter adapter = new SqlDataAdapter(query, conn);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+
+                    foreach (DataRow row in dt.Rows)
+                    {
+                        QueueMessage data = new QueueMessage
+                        {
+                            Id = Convert.ToInt32(row["id"]),
+                            Priority = row["priority"] != DBNull.Value ? Convert.ToInt32(row["priority"]) : 0,
+                            // Convert DateTimeOffset to DateTime
+                            Expiration = ((DateTimeOffset)row["expiration"]).DateTime,
+                            Visible = ((DateTimeOffset)row["visible"]).DateTime,
+                            Headers = row["headers"] != DBNull.Value ? (byte[])row["headers"] : null,
+                            Body = row["body"] != DBNull.Value ? (byte[])row["body"] : null,
+                            BodyDecoded = null,
+                            HeadersDecoded = null
+                        };
+
+                        // Decode 'headers' if it's not null and decode byte array to JSON
+                        if (data.Headers != null)
+                        {
+                            string headerString = Encoding.UTF8.GetString(data.Headers);
+                            try
+                            {
+
+                                // Parse dan format ulang dengan indentasi
+                                var parsedJson = JToken.Parse(headerString);
+                                string formattedJson = parsedJson.ToString(Formatting.Indented);
+                                data.MessageType = parsedJson["rbs2-msg-type"]?.ToString() ?? "";
+                                data.HeadersDecoded = formattedJson;  // Parse JSON object from string
+                            }
+                            catch (Exception)
+                            {
+                                data.HeadersDecoded = null;  // If it's not valid JSON, just leave it as null
+                            }
+                        }
+
+                        // Decode 'body' if it's not null and decode byte array to JSON
+                        if (data.Body != null)
+                        {
+                            string bodyString = Encoding.UTF8.GetString(data.Body);
+                            try
+                            {
+                                // Parse dan format ulang dengan indentasi
+                                var parsedJson = JToken.Parse(bodyString);
+                                string formattedJson = parsedJson.ToString(Formatting.Indented);
+                                data.BodyDecoded = formattedJson;  // Parse JSON object from string
+                            }
+                            catch (Exception)
+                            {
+                                data.BodyDecoded = null;  // If it's not valid JSON, just leave it as null
+                            }
+                        }
+
+                        decodedData.Add(data);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("❌ Error: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            return decodedData;
+        }
+        // ✅ Klik Button untuk Load Data Manual
         // ✅ Klik Button untuk Load Data Manual
         private void button1_Click(object sender, EventArgs e)
         {
@@ -183,15 +259,39 @@ namespace RebusQueue
                                 "Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            // Clear existing data from DataGridViews
+
+            // Clear DataGridView
             dataGridView1.DataSource = null;
-            dataGridView2.DataSource = null;
 
-            // Optionally clear any selection or reset column definitions
-            dataGridView1.Rows.Clear();
-            dataGridView2.Rows.Clear();
-
-            LoadDataToDataGridView();
+            // Cek node yang sedang dipilih di TreeView
+            if (treeView.SelectedNode != null)
+            {
+                switch (treeView.SelectedNode.Text)
+                {
+                    case "Messages":
+                        // Clear DataGridView
+                        dataGridView1.DataSource = null;
+                        LoadMessages();
+                        break;
+                    case "Saga Data":
+                        // Clear DataGridView
+                        dataGridView1.DataSource = null;
+                        LoadSagaData();
+                        break;
+                    case "Dead Letter":
+                        // Clear DataGridView
+                        dataGridView1.DataSource = null;
+                        LoadDeadLetters();
+                        break;
+                    default:
+                        MessageBox.Show("⚠️ Pilih kategori data terlebih dahulu.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        break;
+                }
+            }
+            else
+            {
+                MessageBox.Show("⚠️ Pilih kategori data terlebih dahulu.", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void UpdateStatusBar()
@@ -228,11 +328,33 @@ namespace RebusQueue
             }
             return Encoding.UTF8.GetString(bytes);
         }
-    }
+
+		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+            switch (e.Node.Text)
+            {
+                case "Messages":
+                    // Clear DataGridView
+                    dataGridView1.DataSource = null;
+                    LoadMessages();
+                    break;
+                case "Saga Data":
+                    // Clear DataGridView
+                    dataGridView1.DataSource = null;
+                    LoadSagaData();
+                    break;
+                case "Dead Letter":
+                    // Clear DataGridView
+                    dataGridView1.DataSource = null;
+                    LoadDeadLetters();
+                    break;
+            }
+        }
+	}
 
 
 
-    public class QueueMessage
+	public class QueueMessage
     {
         public int Id { get; set; }
         public int Priority { get; set; }
