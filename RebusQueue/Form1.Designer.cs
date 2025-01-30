@@ -56,26 +56,22 @@
 			// splitContainer.Panel1
 			// 
 			this.splitContainer.Panel1.Controls.Add(this.treeView);
-
 			// 
 			// splitContainer.Panel2
 			// 
 			this.splitContainer.Panel2.Controls.Add(this.tableLayout);
-			this.splitContainer.Size = new System.Drawing.Size(284, 203);
-			this.splitContainer.SplitterDistance = 94;
+			this.splitContainer.Size = new System.Drawing.Size(1237, 386);
+			this.splitContainer.SplitterDistance = 409;
 			this.splitContainer.TabIndex = 1;
-
 			// 
 			// treeView
 			// 
 			this.treeView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.treeView.Location = new System.Drawing.Point(0, 0);
 			this.treeView.Name = "treeView";
-			this.treeView.Size = new System.Drawing.Size(94, 203);
+			this.treeView.Size = new System.Drawing.Size(409, 386);
 			this.treeView.TabIndex = 0;
 			this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
-
-
 			// 
 			// tableLayout
 			// 
@@ -86,23 +82,10 @@
 			this.tableLayout.Location = new System.Drawing.Point(0, 0);
 			this.tableLayout.Name = "tableLayout";
 			this.tableLayout.RowCount = 2;
-			this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-			this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F)); // Row untuk label count1
-			this.tableLayout.Size = new System.Drawing.Size(186, 203);
+			this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 90F));
+			this.tableLayout.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
+			this.tableLayout.Size = new System.Drawing.Size(824, 386);
 			this.tableLayout.TabIndex = 0;
-
-
-			// 
-			// labelCount1
-			// 
-			this.labelCount1 = new System.Windows.Forms.Label();
-			this.labelCount1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.labelCount1.Location = new System.Drawing.Point(3, 175);
-			this.labelCount1.Name = "labelCount1";
-			this.labelCount1.Size = new System.Drawing.Size(180, 20);
-			this.labelCount1.TabIndex = 1;
-			this.labelCount1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-
 			// 
 			// dataGridView1
 			// 
@@ -110,30 +93,39 @@
 			this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.dataGridView1.Location = new System.Drawing.Point(3, 3);
 			this.dataGridView1.Name = "dataGridView1";
-			this.dataGridView1.Size = new System.Drawing.Size(180, 177);
+			this.dataGridView1.Size = new System.Drawing.Size(818, 298);
 			this.dataGridView1.TabIndex = 0;
-			//// 
-			//// dataGridView2
-			//// 
-			//this.dataGridView2.Location = new System.Drawing.Point(0, 0);
-			//this.dataGridView2.Name = "dataGridView2";
-			//this.dataGridView2.Size = new System.Drawing.Size(240, 150);
-			//this.dataGridView2.TabIndex = 0;
-			//// 
-			//// labelCount2
-			//// 
-			//this.labelCount2.Location = new System.Drawing.Point(0, 0);
-			//this.labelCount2.Name = "labelCount2";
-			//this.labelCount2.Size = new System.Drawing.Size(100, 23);
-			//this.labelCount2.TabIndex = 0;
+			// 
+			// labelCount1
+			// 
+			this.labelCount1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.labelCount1.Location = new System.Drawing.Point(3, 304);
+			this.labelCount1.Name = "labelCount1";
+			this.labelCount1.Size = new System.Drawing.Size(818, 82);
+			this.labelCount1.TabIndex = 1;
+			this.labelCount1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// dataGridView2
+			// 
+			this.dataGridView2.Location = new System.Drawing.Point(0, 0);
+			this.dataGridView2.Name = "dataGridView2";
+			this.dataGridView2.Size = new System.Drawing.Size(240, 150);
+			this.dataGridView2.TabIndex = 0;
+			// 
+			// labelCount2
+			// 
+			this.labelCount2.Location = new System.Drawing.Point(0, 0);
+			this.labelCount2.Name = "labelCount2";
+			this.labelCount2.Size = new System.Drawing.Size(100, 23);
+			this.labelCount2.TabIndex = 0;
 			// 
 			// logConsole
 			// 
 			this.logConsole.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.logConsole.Location = new System.Drawing.Point(0, 226);
+			this.logConsole.Location = new System.Drawing.Point(0, 409);
 			this.logConsole.Multiline = true;
 			this.logConsole.Name = "logConsole";
-			this.logConsole.Size = new System.Drawing.Size(284, 35);
+			this.logConsole.Size = new System.Drawing.Size(1237, 35);
 			this.logConsole.TabIndex = 2;
 			// 
 			// btnRetrieve
@@ -141,7 +133,7 @@
 			this.btnRetrieve.Dock = System.Windows.Forms.DockStyle.Top;
 			this.btnRetrieve.Location = new System.Drawing.Point(0, 0);
 			this.btnRetrieve.Name = "btnRetrieve";
-			this.btnRetrieve.Size = new System.Drawing.Size(284, 23);
+			this.btnRetrieve.Size = new System.Drawing.Size(1237, 23);
 			this.btnRetrieve.TabIndex = 3;
 			this.btnRetrieve.Text = "Retrieve Messages";
 			this.btnRetrieve.Click += new System.EventHandler(this.button1_Click);
@@ -150,9 +142,9 @@
 			// 
 			this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-			this.statusStrip.Location = new System.Drawing.Point(0, 204);
+			this.statusStrip.Location = new System.Drawing.Point(0, 387);
 			this.statusStrip.Name = "statusStrip";
-			this.statusStrip.Size = new System.Drawing.Size(284, 22);
+			this.statusStrip.Size = new System.Drawing.Size(1237, 22);
 			this.statusStrip.TabIndex = 0;
 			// 
 			// statusLabel
@@ -162,7 +154,7 @@
 			// 
 			// Form1
 			// 
-			this.ClientSize = new System.Drawing.Size(284, 261);
+			this.ClientSize = new System.Drawing.Size(1237, 444);
 			this.Controls.Add(this.statusStrip);
 			this.Controls.Add(this.splitContainer);
 			this.Controls.Add(this.logConsole);
@@ -249,6 +241,8 @@
 			if (dataGridView1.Columns["Visible"] != null)
 				dataGridView1.Columns["Visible"].DefaultCellStyle.Format = "yyyy-MM-dd HH:mm:ss";
 			labelCount1.Text = $"Total Messages: {data.Count}";
+			// Paksa label agar terlihat
+			labelCount1.BringToFront();
 		}
 
 		private void LoadSagaData()
@@ -256,7 +250,7 @@
 			List<SagaData> sagaData = GetSagaData();
 
 
-			dataGridView2.DataSource = sagaData;
+			dataGridView1.DataSource = sagaData;
 			// Optional: Menyesuaikan kolom yang ditampilkan
 			if (dataGridView1.Columns["Headers"] != null)
 				dataGridView1.Columns["Headers"].Visible = false;  // Kolom asli, mungkin ingin disembunyikan
@@ -265,7 +259,9 @@
 																// ✅ Update jumlah data yang ditampilkan
 			if (dataGridView1.Columns["Data"] != null)
 				dataGridView1.Columns["Data"].Visible = false;  // Kolom asli, mungkin ingin disembunyikan
-			labelCount2.Text = $"Total Saga Data: {sagaData.Count}";
+			labelCount1.Text = $"Total Saga Data: {sagaData.Count}";
+			// Paksa label agar terlihat
+			labelCount1.BringToFront();
 		}
 
 		private void LoadDeadLetters()
@@ -280,6 +276,8 @@
 				dataGridView1.Columns["Body"].Visible = false;  // Kolom asli, mungkin ingin disembunyikan
 																// ✅ Update jumlah data yang ditampilkan
 			labelCount1.Text = $"Total Dead Letters: {deadLetterData.Count}";
+			// Paksa label agar terlihat
+			labelCount1.BringToFront();
 		}
 
 		private void InitializeTreeView()
